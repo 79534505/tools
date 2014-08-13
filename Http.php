@@ -59,7 +59,7 @@ class Http
         
         $ci = curl_init();
         
-        curl_setopt($ci, CURLOPT_USERAGENT, 'PHP Http Client');
+        curl_setopt($ci, CURLOPT_USERAGENT, self::$userAgent);
         curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 3);
         
         $timeout = $files ? 30 : 3;
