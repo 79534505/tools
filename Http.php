@@ -2,7 +2,21 @@
 
 
 /**
- * HTTP 请求类
+ * HTTP Client
+ *
+ * @example
+ * <pre>
+ * Usage:
+ * 
+ * Http::get($url, $params);
+ * Http::post($url, $params);
+ * Http::put($url, $params);
+ * patch, option, head....
+ *
+ * or:
+ *
+ * Http::request('GET', $url, $params);
+ * </pre>
  * 
  * @author  Joy chao <anzhengchao@gmail.com>
  * @version 1.0 2014-06-17
@@ -29,14 +43,16 @@ class Http
 
     /**
      * 发起一个HTTP/HTTPS的请求
-     * @param $method 请求类型    GET|POST
-     * @param $url 接口的URL
-     * @param $params 接口参数   array('content'=>'test', 'format'=>'json');
-     * @param $multi 图片信息
-     * @param $extheaders 扩展的包头信息
+     * 
+     * @param string $method     请求类型    GET | POST...
+     * @param string $url        接口的URL
+     * @param array  $params     接口参数   array('content'=>'test', 'format'=>'json');
+     * @param array  $files      图片信息
+     * @param arrat  $extheaders 扩展的包头信息
+     * 
      * @return string
      */
-    public static function request($method, $url, $params = array(), $multi = false, array $extheaders = array())
+    public static function request($method, $url, $params = array(), $files = [], array $extheaders = array())
     {
         if(!function_exists('curl_init')) exit('Need to open the curl extension');
         $method = strtoupper($method);
@@ -46,7 +62,7 @@ class Http
         curl_setopt($ci, CURLOPT_USERAGENT, 'PHP Http Client');
         curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 3);
         
-        $timeout = $multi ? 30 : 3;
+        $timeout = $files ? 30 : 3;
         
         curl_setopt($ci, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ci, CURLOPT_RETURNTRANSFER, true);
@@ -61,11 +77,12 @@ class Http
             case 'POST':
             case 'PATCH':
                 $method != 'POST' && curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $method);
+                
                 curl_setopt($ci, CURLOPT_POST, TRUE);
-                if (!empty($params))
-                {
-                    if($multi) {
-                        foreach($multi as $index => $file) {
+
+                if (!empty($params)) {
+                    if(!empty($files)) {
+                        foreach($files as $index => $file) {
                             $params[$index] = '@' . $file;
                         }
                         curl_setopt($ci, CURLOPT_POSTFIELDS, $params);
@@ -80,6 +97,7 @@ class Http
             case 'GET':
             case 'OPTION':
                 $method != 'GET' && curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $method);
+                
                 if (!empty($params)) {
                     $url = $url . (strpos($url, '?') ? '&' : '?')
                         . (is_array($params) ? http_build_query($params) : $params);
@@ -102,6 +120,9 @@ class Http
     
     /**
      * static call 
+     *
+     * @param string $method request method.
+     * @param array  $args   request params.
      *
      * @return mixed
      */
