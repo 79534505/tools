@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Github repo: https://github.com/joychao/tools
+# Github repo: https://github.com/overtrue/tools
 # 
 # 本脚本包含数据库自动备份功能，导出sql并gzip压缩
 # 可选邮件自动发送到指定邮箱（需要安装sendEmail）
