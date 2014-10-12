@@ -8,15 +8,19 @@
 # 
 # -----------------
 #
+
 # 当前脚本路径
 BASEDIR=$(dirname $(readlink -f $0)) 
-
+# 你的www目录
 WWW_DIR=你的www目录
+# 你的www用户名与组
 WWW_USER=你的www用户名
 WWW_GROUP=你的www用户组
 
+# repo地址
 REPO_URL=giturl
-REPO_NAME=就是这个项目在www目录下的目录名,比如：www/laravel，就写上laravel
+# 项目在www目录下的目录名
+REPO_NAME=项目在www目录下的目录名,比如：www/laravel，就写上laravel
 
 cd $WWW_DIR
 
