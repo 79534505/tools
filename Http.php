@@ -1,6 +1,4 @@
-<?php namespace Overtrue\Wechat\Utils;
-
-use Exception;
+<?php 
 
 /**
  * HTTP Client
